@@ -7,7 +7,11 @@ function App() {
   const[fiction, changeFiction]=useState(true);
   const[nonFiction, changeNon]=useState(true);
   const[children, changeChildren]=useState(true);
-  const bookData = {
+  const [basket, setBasket] = useState([]);
+  const updateBasket = (book) =>{
+    setBasket(prev=>[...prev, book])
+  }
+    const bookData = {
     "fiction": [
       {"title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "price": 10.00},
       {"title": "1984", "author": "George Orwell", "price": 8.50},
@@ -34,9 +38,25 @@ function App() {
         <button onClick={()=>changeChildren(!children)}>{children?"Hide Children":"Unhide Children"}</button>
        </span>
         <div>
-          {fiction && <DisplayGenre genre="fiction" bookData={bookData}/>}
-          {nonFiction && <DisplayGenre genre="non-fiction" bookData={bookData}/>}
-          {children && <DisplayGenre genre="children" bookData={bookData}/>}
+          {fiction && <DisplayGenre genre="fiction" bookData={bookData} updateBasket={updateBasket}/>}
+          {nonFiction && <DisplayGenre genre="non-fiction" bookData={bookData} updateBasket={updateBasket}/>}
+          {children && <DisplayGenre genre="children" bookData={bookData} updateBasket={updateBasket}/>}
+        </div>
+        <div>
+          <h1>Basket</h1>
+          {basket.map((book,idx)=>(
+              <div key={idx}>
+                   <p>
+                    <i>{book.title}</i>,
+                    {book.author},
+                    ${book.price.toFixed(2)} 
+                  </p>
+                  <button onClick={()=>{
+                    setBasket((prev)=> prev.filter((_,i)=>i!==idx))
+                  }}>Unadd</button>
+              </div>
+            
+            ))}
         </div>
     </>
    
